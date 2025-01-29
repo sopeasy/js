@@ -10,7 +10,8 @@
         ingestUrl: 'https://api.peasy.so/v1/ingest/',
         maskPatterns: [],
         autoPageView: true,
-        ignoreQueryParams: false
+        ignoreQueryParams: false,
+        setLocalVisitorId: true
     };
 
     const attr = window.document.currentScript.getAttribute.bind(window.document.currentScript);
@@ -24,6 +25,7 @@
     config.maskPatterns = JSON.parse(attr('data-mask-patterns') || '[]');
     config.autoPageView = attr('data-auto-page-view') !== "false";
     config.ignoreQueryParams = attr('data-ignore-query-params') === "true";
+    config.setLocalVisitorId = attr('data-set-local-visitor-id') !== "false";
 
     if (!config.websiteId) {
         console.warn('[peasy.js] Website ID not provided');
@@ -153,5 +155,6 @@
         track,
         page,
         setProfile,
+        VISITOR_ID_LOCALSTORAGE_KEY
     };
 })(window);
