@@ -100,6 +100,7 @@ export const Peasy = (options: PeasyOptions) => {
         }
 
         _url.pathname = pathname;
+
         return _url.toString();
     }
 
@@ -141,8 +142,9 @@ export const Peasy = (options: PeasyOptions) => {
     };
 
     const _registerPageChangeListeners = () => {
+        const originalPushState = history.pushState;
         history.pushState = function (...args) {
-            history.pushState.apply(this, args);
+            originalPushState.apply(history, args);
             page();
         };
 
