@@ -10,29 +10,38 @@ jobs:
   upload:
     runs-on: ubuntu-latest
     steps:
-      - name: checkout repo
-        uses: actions/checkout@v4
+    - name: checkout repo
+      uses: actions/checkout@v4
+
+    - name: setup pnpm
+      uses: pnpm/action-setup@v4
       
-      - id: install-aws-cli
-        uses: unfor19/install-aws-cli-action@v1
-        with:
+    - name: build scripts
+      run: |
+          pnpm install
+          pnpm run build
+          pnpm run build:min
+          
+    - id: install-aws-cli
+      uses: unfor19/install-aws-cli-action@v1
+      with:
           version: 2.22.35
 
-      - name: upload to s3
-        run: |
-          aws s3 cp peasy.js s3://peasy-cdn/ --endpoint-url ${{secrets.S3_ENDPOINT}}
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.S3_ACCESS_KEY_ID}}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.S3_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: 'us-east-1'
+    - name: upload to s3
+      run: |
+          aws s3 cp dist/peasy.min.js s3://peasy-cdn/ --endpoint-url ${{secrets.S3_ENDPOINT}}
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.S3_ACCESS_KEY_ID}}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.S3_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: 'us-east-1'
       
     
-      - name: purge cache
-        run: |
+    - name: purge cache
+      run: |
           curl -X POST "https://api.cloudflare.com/client/v4/zones/${{ secrets.CLOUDFLARE_CLIENT_ID}}/purge_cache" \
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer ${{secrets.CLOUDFLARE_API_TOKEN}}" \
-          -d '{"files":[{"url":"https://cdn.peasy.so/peasy.js"}]}'
+          -d '{"files":[{"url":"https://cdn.peasy.so/peasy.js"},{"url":"https://cdn.peasy.so/peasy.min.js"}]}'
 
 
 

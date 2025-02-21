@@ -1,0 +1,16 @@
+{
+  "name": "@sopeasy/js",
+  "version": "1.0.0",
+  "description": "A lightweight, privacy-focused analytics script for websites. This is the standalone JavaScript version that can be included directly in your HTML without any build tools or package managers.",
+  "main": "peasy.js",
+  "scripts": {
+    "build": "esbuild peasy.ts --bundle --outfile=dist/peasy.js",
+    "build:min": "esbuild peasy.ts --bundle --minify  --outfile=dist/peasy.min.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "esbuild": "^0.25.0"
+  }
+}
