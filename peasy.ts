@@ -225,8 +225,8 @@ export const Peasy = (options: PeasyOptions) => {
 if (!window.peasy) {
     const peasy = Peasy(
         {
-            websiteId: document.currentScript?.getAttribute("data-token")!,
-            ingestUrl: document.currentScript?.getAttribute("data-api-host") ?? null,
+            websiteId: document.currentScript?.getAttribute("data-website-id")!,
+            ingestUrl: document.currentScript?.getAttribute("data-ingest-url") ?? null,
             autoPageView: document.currentScript?.getAttribute("data-auto-page-view") !== "false",
             maskPatterns: document.currentScript?.getAttribute("data-mask-patterns")?.split(",") ?? null,
             skipPatterns: document.currentScript?.getAttribute("data-skip-patterns")?.split(",") ?? null,
