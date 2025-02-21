@@ -224,5 +224,6 @@ if (!window.peasy) {
             skipPatterns: document.currentScript?.getAttribute("data-skip-patterns")?.split(",") ?? null,
         }
     );
+    peasy.init();
     window.peasy = peasy;
 }
