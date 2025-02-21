@@ -100,7 +100,6 @@ export const Peasy = (options: PeasyOptions) => {
         }
 
         _url.pathname = pathname;
-        _url.search = ''
         return _url.toString();
     }
 
