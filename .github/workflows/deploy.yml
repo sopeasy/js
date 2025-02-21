@@ -41,7 +41,7 @@ jobs:
     
     - name: purge cache
       run: |
-          curl -X POST "https://api.cloudflare.com/client/v4/zones/${{ secrets.CLOUDFLARE_CLIENT_ID}}/purge_cache" \
+          curl -X POST "https://api.cloudflare.com/client/v4/zones/${{ secrets.CLOUDFLARE_ZONE_ID}}/purge_cache" \
           -H "Content-Type: application/json" \
           -H "Authorization: Bearer ${{secrets.CLOUDFLARE_API_TOKEN}}" \
           -d '{"files":["https://cdn.peasy.so/peasy.js","https://cdn.peasy.so/peasy.min.js"]}'
