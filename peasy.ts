@@ -161,32 +161,24 @@ export const Peasy = (options: PeasyOptions) => {
     const _registerCustomEventListeners = () => {
         document.addEventListener("click", (event) => {
             let targetElement = event.target as HTMLElement | null;
-
-            if (
-                !targetElement ||
-                ((targetElement.tagName === "INPUT" ||
-                    targetElement.tagName === "SELECT" ||
-                    targetElement.tagName === "TEXTAREA") &&
-                    //@ts-ignore
-                    targetElement.type !== "submit")
-            ) {
+            if (targetElement?.tagName === "SELECT" || targetElement?.tagName === "TEXTAREA" ||
+                (targetElement?.tagName === "INPUT" &&
+                    !["button", "submit"].includes(targetElement.getAttribute("type") || ""))) {
                 return;
             }
-
             while (targetElement && !targetElement?.hasAttribute("data-peasy-event")) {
                 targetElement = targetElement.parentElement;
             }
-
             if (!targetElement) return;
 
-            const eventName = targetElement.getAttribute("data-peasy-event");
-            if (!eventName) return;
+            const name = targetElement.getAttribute("data-peasy-event");
+            if (!name) return;
 
-            const eventData = {};
+            const data = {};
 
             for (const attr of Array.from(targetElement.attributes)) {
                 if (attr.name.startsWith("data-peasy-event-") && attr.value) {
-                    eventData[attr.name.slice("data-peasy-event-".length)] = attr.value;
+                    data[attr.name.slice("data-peasy-event-".length)] = attr.value;
                 }
             }
 
@@ -199,17 +191,17 @@ export const Peasy = (options: PeasyOptions) => {
                     if (input.hasAttribute("data-peasy-ignore")) continue;
 
                     if (input.type === 'checkbox' || input.type === 'radio') {
-                        eventData[input.name] = input.checked;
+                        data[input.name] = input.checked;
                         continue
                     }
 
                     if (input.value) {
-                        eventData[input.name] = input.value;
+                        data[input.name] = input.value;
                     }
                 }
             }
 
-            track(eventName, eventData);
+            track(name, data);
         });
     }
 

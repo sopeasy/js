@@ -31,6 +31,7 @@ jobs:
 
     - name: upload to s3
       run: |
+          aws s3 cp dist/peasy.js s3://peasy-cdn/ --endpoint-url ${{secrets.S3_ENDPOINT}}
           aws s3 cp dist/peasy.min.js s3://peasy-cdn/ --endpoint-url ${{secrets.S3_ENDPOINT}}
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.S3_ACCESS_KEY_ID}}
