@@ -67,6 +67,7 @@ export const Peasy = (options: PeasyOptions) => {
     }
 
     function setProfile(id: string, data: Record<string, unknown>) {
+        localStorage.setItem(PROFILE_ID_LOCALSTORAGE_KEY, id)
         _send("p", {
             website_id: websiteId,
             host_name: location.hostname,
