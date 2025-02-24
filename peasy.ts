@@ -37,14 +37,14 @@ export const Peasy = (options: PeasyOptions) => {
     let lastPage: string | null = null;
 
 
-    const init = () => {
+    function init() {
         if (autoPageView) {
             _registerPageChangeListeners();
         }
         _registerCustomEventListeners();
     }
 
-    const track = (event: string, data?: Record<string, unknown>) => {
+    function track(event: string, data?: Record<string, unknown>) {
         if (_isTrackingDisabled()) return;
 
         const pageUrl = _processUrl(location.href);
@@ -66,7 +66,7 @@ export const Peasy = (options: PeasyOptions) => {
         _send("e", payload);
     }
 
-    const setProfile = (id: string, data: Record<string, unknown>) => {
+    function setProfile(id: string, data: Record<string, unknown>) {
         _send("p", {
             website_id: websiteId,
             host_name: location.hostname,
@@ -75,13 +75,13 @@ export const Peasy = (options: PeasyOptions) => {
         });
     };
 
-    const page = () => {
+    function page() {
         if (lastPage === location.pathname) return;
         lastPage = location.pathname;
         track('$page_view', { page_title: document.title });
     };
 
-    const disableTracking = () => {
+    function disableTracking() {
         localStorage.setItem(DO_NOT_TRACK_LOCALSTORAGE_KEY, "true")
     }
 
@@ -104,22 +104,22 @@ export const Peasy = (options: PeasyOptions) => {
         return _url.toString();
     }
 
-    const _getReferrer = () => {
+    function _getReferrer() {
         return !document.referrer.includes(location.hostname) ? document.referrer : '';
     };
 
-    const _isTrackingDisabled = () => {
+    function _isTrackingDisabled() {
         return localStorage.getItem(DO_NOT_TRACK_LOCALSTORAGE_KEY) === "true"
     };
 
-    const _normalizeUrl = (url: string) => {
+    function _normalizeUrl(url: string) {
         if (url.endsWith("/")) {
             return url.slice(0, -1);
         }
         return url;
     }
 
-    const _send = (path: string, payload: Record<string, unknown>) => {
+    function _send(path: string, payload: Record<string, unknown>) {
         try {
             const url = new URL(path, ingestUrl).href;
             fetch(url, {
@@ -141,7 +141,7 @@ export const Peasy = (options: PeasyOptions) => {
         }
     };
 
-    const _registerPageChangeListeners = () => {
+    function _registerPageChangeListeners() {
         const originalPushState = history.pushState;
         history.pushState = function (...args) {
             originalPushState.apply(history, args);
@@ -159,7 +159,7 @@ export const Peasy = (options: PeasyOptions) => {
         }
     }
 
-    const _registerCustomEventListeners = () => {
+    function _registerCustomEventListeners() {
         document.addEventListener("click", (event) => {
             let targetElement = event.target as HTMLElement | null;
             if (targetElement?.tagName === "SELECT" || targetElement?.tagName === "TEXTAREA" ||
