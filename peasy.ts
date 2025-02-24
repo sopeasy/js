@@ -126,12 +126,12 @@ export const Peasy = (options: PeasyOptions) => {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-Visitor-ID': localStorage.getItem(VISITOR_ID_LOCALSTORAGE_KEY) || '',
+                    'X-Profile-ID': localStorage.getItem(VISITOR_ID_LOCALSTORAGE_KEY) || '',
                 },
                 body: JSON.stringify(payload),
                 keepalive: true,
             }).then(r => {
-                const visitorId = r.headers.get('X-Visitor-ID');
+                const visitorId = r.headers.get('X-Profile-ID');
                 if (visitorId) {
                     localStorage.setItem(VISITOR_ID_LOCALSTORAGE_KEY, visitorId);
                 }
