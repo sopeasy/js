@@ -20,7 +20,7 @@ export type PeasyOptions = {
     skipPatterns: string[] | null;
 }
 
-const VISITOR_ID_LOCALSTORAGE_KEY = 'peasy-visitor-id';
+const PROFILE_ID_LOCALSTORAGE_KEY = 'peasy-profile-id';
 const DO_NOT_TRACK_LOCALSTORAGE_KEY = 'peasy-do-not-track';
 
 export const Peasy = (options: PeasyOptions) => {
@@ -126,14 +126,14 @@ export const Peasy = (options: PeasyOptions) => {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-Profile-ID': localStorage.getItem(VISITOR_ID_LOCALSTORAGE_KEY) || '',
+                    'X-Profile-ID': localStorage.getItem(PROFILE_ID_LOCALSTORAGE_KEY) || '',
                 },
                 body: JSON.stringify(payload),
                 keepalive: true,
             }).then(r => {
                 const visitorId = r.headers.get('X-Profile-ID');
                 if (visitorId) {
-                    localStorage.setItem(VISITOR_ID_LOCALSTORAGE_KEY, visitorId);
+                    localStorage.setItem(PROFILE_ID_LOCALSTORAGE_KEY, visitorId);
                 }
             });
         } catch (e) {
