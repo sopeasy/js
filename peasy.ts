@@ -187,6 +187,7 @@ export const Peasy = (options: PeasyOptions) => {
             if (targetElement.tagName === "FORM") {
                 const form = targetElement as HTMLFormElement;
                 const inputs = Array.from(form.elements) as HTMLInputElement[];
+                data['$action url'] = form.action
                 for (const input of inputs) {
                     if (input.type == "password") continue;
                     if (!input.name) continue
