@@ -38,8 +38,6 @@ The script can be configured using data attributes:
 - `data-ingest-url` (optional): Custom ingest host (default: 'https://api.peasy.so/v1/ingest/')
 - `data-mask-patterns` (optional): Comma-separated list of patterns to mask in URL tracking
 - `data-auto-page-view` (optional): Enable/disable automatic page view tracking (default: true)
-- `data-ignore-query-params` (optional): Ignore query parameters in tracked URLs (default: false)
-
 ## Usage
 
 ### Automatic Page View Tracking
