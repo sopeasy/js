@@ -79,7 +79,7 @@ export const Peasy = (options: PeasyOptions) => {
     function page() {
         if (lastPage === location.pathname) return;
         lastPage = location.pathname;
-        track('$page_view', { page_title: document.title });
+        track('$page_view', { $page_title: document.title });
     };
 
     function disableTracking() {
