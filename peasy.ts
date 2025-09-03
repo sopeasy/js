@@ -54,11 +54,6 @@ export const Peasy = (options: PeasyOptions) => {
 
         const metadata = { ...(data || {}) };
 
-        const quotedText = _getQuotedTextFromUrl(location.href);
-        if (quotedText) {
-            metadata.$quoted_text = quotedText;
-        }
-
         const payload = {
             name: event,
             website_id: websiteId,
@@ -90,7 +85,7 @@ export const Peasy = (options: PeasyOptions) => {
         const pageData: Record<string, unknown> = { $page_title: document.title };
 
         // Capture quoted text from URL fragment (:~:text=)
-        const quotedText = _getQuotedTextFromUrl(location.href);
+        const quotedText = _getQuotedTextFromUrl();
         if (quotedText) {
             pageData.$quoted_text = quotedText;
         }
@@ -136,9 +131,12 @@ export const Peasy = (options: PeasyOptions) => {
         return url;
     }
 
-    function _getQuotedTextFromUrl(url: string) {
+    function _getQuotedTextFromUrl() {
         try {
-            const urlObj = new URL(url);
+            const navigationEntry = performance.getEntries().find((entry) => (entry as any).type === 'navigate');
+            if (!navigationEntry) return null;
+
+            const urlObj = new URL(navigationEntry.name);
             const fragment = urlObj.hash;
 
             // Look for :~:text= in the fragment
