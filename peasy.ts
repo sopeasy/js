@@ -52,6 +52,13 @@ export const Peasy = (options: PeasyOptions) => {
             return;
         }
 
+        const metadata = { ...(data || {}) };
+
+        const quotedText = _getQuotedTextFromUrl(location.href);
+        if (quotedText) {
+            metadata.$quoted_text = quotedText;
+        }
+
         const payload = {
             name: event,
             website_id: websiteId,
@@ -60,7 +67,7 @@ export const Peasy = (options: PeasyOptions) => {
             referrer: _getReferrer(),
             lang: navigator.language,
             screen: `${screen.width}x${screen.height}`,
-            metadata: data || {},
+            metadata: metadata,
         };
 
         _send("e", payload);
@@ -79,7 +86,16 @@ export const Peasy = (options: PeasyOptions) => {
     function page() {
         if (lastPage === location.pathname) return;
         lastPage = location.pathname;
-        track('$page_view', { $page_title: document.title });
+
+        const pageData: Record<string, unknown> = { $page_title: document.title };
+
+        // Capture quoted text from URL fragment (:~:text=)
+        const quotedText = _getQuotedTextFromUrl(location.href);
+        if (quotedText) {
+            pageData.$quoted_text = quotedText;
+        }
+
+        track('$page_view', pageData);
     };
 
     function disableTracking() {
@@ -118,6 +134,24 @@ export const Peasy = (options: PeasyOptions) => {
             return url.slice(0, -1);
         }
         return url;
+    }
+
+    function _getQuotedTextFromUrl(url: string) {
+        try {
+            const urlObj = new URL(url);
+            const fragment = urlObj.hash;
+
+            // Look for :~:text= in the fragment
+            const textMatch = fragment.match(/:~:text=([^&]*)/);
+            if (textMatch && textMatch[1]) {
+                // Decode the URL-encoded text
+                return decodeURIComponent(textMatch[1].replace(/,/g, ' '));
+            }
+
+            return null;
+        } catch (e) {
+            return null;
+        }
     }
 
     function _send(path: string, payload: Record<string, unknown>) {
